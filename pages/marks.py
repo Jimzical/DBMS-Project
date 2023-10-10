@@ -77,9 +77,12 @@ def for_multiple_electives(df):
     )
 
 def for_2_electives(df):
-    for index, row in df.iterrows():
-        st.write(row["elective_subject"])
+    # basically what i wanted to do is have a table for each subject with isa1, isa2, esa as x axis and marks as y axis
 
+    # for subject 1
+
+
+    pass
 def marks_main_func():
     # ADDING CONNECTION HERE
     # sample
@@ -99,8 +102,8 @@ def marks_main_func():
     
     st.divider()
     with st.expander("Bar Graphs",expanded=True):
-        # for_multiple_electives(df)
-        for_2_electives(df)
+        for_multiple_electives(df)
+        # for_2_electives(df)
 
 if __name__ == "__main__":
     add_page_title(layout="wide")
