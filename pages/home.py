@@ -4,10 +4,10 @@ from random import randint
 
 def csv_template():
     with st.expander("How to Upload CSV"):
-        st.write("1. Download the csv template")
-        st.write("2. Fill the csv template with instructor details")
-        st.write("3. Upload the csv file")
-        st.write("4. Click on submit")
+        st.write("1. Download the CSV Template")
+        st.write("2. Fill the CSV Template with Required Details")
+        st.write("3. Upload the CSV file")
+        st.write("4. Click on Submit")
 
 def template_files():
     with st.expander("Download CSV Template"):
