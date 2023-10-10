@@ -40,6 +40,8 @@ def get_marks(conn,student_name):
     return marks_df
 
 def for_multiple_electives(df):
+    # probaby wont need it anymore
+    
     plost.bar_chart(
         data=df,
         bar="elective_subject",
@@ -76,12 +78,21 @@ def for_multiple_electives(df):
         # use_container_width=True,
     )
 
-def for_2_electives(df):
-    # basically what i wanted to do is have a table for each subject with isa1, isa2, esa as x axis and marks as y axis
-
-    # for subject 1
-
-
+def for_few_electives(df):
+    for item,row in df.iterrows():
+        st.subheader(row["elective_subject"])
+        temp = pd.DataFrame(columns=["Exam","Marks"],data=[["isa1",row["isa1"]],["isa2",row["isa2"]],["esa",row["esa"]]])
+        plost.bar_chart(
+            data=temp,
+            bar="Exam",
+            value="Marks",
+            title="Marks",
+            color="Exam",
+            height=500,
+            width=1000,
+            opacity=0.8,
+            # use_container_width=True,
+        )
     pass
 def marks_main_func():
     # ADDING CONNECTION HERE
@@ -102,8 +113,9 @@ def marks_main_func():
     
     st.divider()
     with st.expander("Bar Graphs",expanded=True):
-        for_multiple_electives(df)
-        # for_2_electives(df)
+        st.title("Best Visualisation for Few Electives")
+        for_few_electives(df)
+        # for_multiple_electives(df)
 
 if __name__ == "__main__":
     add_page_title(layout="wide")
