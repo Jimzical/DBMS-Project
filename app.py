@@ -2,9 +2,6 @@ import streamlit as st
 from st_pages import Page, Section, add_page_title, show_pages
 # from pages.home import home_main_func
 def pages():
-    # -----------------------------------------
-    # TODO: Fix the section indentation stuff
-    # -----------------------------------------
     show_pages(
         [
         Page("pages/home.py", "Home", "🏠"),

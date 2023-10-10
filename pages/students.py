@@ -2,6 +2,8 @@ import streamlit as st
 from components.helper_components import ColoredHeader
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 import pandas as pd
+from st_pages import add_page_title, add_indentation
+
 def get_students_data(conn):
     # TODO: use sql to get the students data
 
@@ -34,11 +36,6 @@ def get_students_data(conn):
 
 
 def students_main_func():
-    ColoredHeader(
-        label="Students",
-        description="Listing all the students"
-    )
-
     # ADDING CONNECTION HERE
     # sample
     # conn = st.experimental_connection("sql")
@@ -53,4 +50,5 @@ def students_main_func():
 
 
 if __name__ == "__main__":
+    add_page_title()
     students_main_func()

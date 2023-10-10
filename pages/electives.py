@@ -2,6 +2,7 @@ import streamlit as st
 from st_pages import add_page_title
 from components.helper_components import ColoredHeader
 from streamlit_extras.dataframe_explorer import dataframe_explorer
+from st_pages import add_page_title, add_indentation
 
 import pandas as pd
 def get_elective_date(conn):
@@ -52,11 +53,6 @@ def get_elective_date(conn):
     return elective_df
 
 def electives_main_func():
-    ColoredHeader(
-        label="Electives",
-        description="List of electives"
-    )
-
     # ADDING CONNECTION HERE
     # sample
     # conn = st.experimental_connection("sql")	
@@ -71,4 +67,5 @@ def electives_main_func():
 
 
 if __name__ == "__main__":
+    add_page_title()
     electives_main_func()
