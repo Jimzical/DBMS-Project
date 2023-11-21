@@ -43,24 +43,58 @@ def get_elective_subjects(conn,student_name):
     
     return elective_list
 
-def submit_marks(conn,student_name, elective_subject, isa1, isa2, esa):
+# def submit_marks(conn,student_name, elective_subject, isa1, isa2, esa):
+#     cursor = conn.cursor(buffered=True)
+#     cursor.execute("USE student_marks")
+#     cursor.execute("SELECT ID from student where name = %s",(student_name,))
+#     student_id = (cursor.fetchall())[0][0]
+    
+#     print(student_id)
+  
+#     # query = "INSERT INTO exam VALUES(%s, %s, %s, %s, %s)"
+#     # values1 = ((elective_subject[:3] + "_" + "isa1"), student_id, isa1,20031210,elective_subject)
+#     # values2 = ((elective_subject[:3] + "_" + "isa2"), student_id, isa2,20031210,elective_subject)
+#     # values3 = ((elective_subject[:3] + "_" + "esa"), student_id, esa,20031210,elective_subject)
+#     # cursor.execute(query,values1)
+#     # cursor.execute(query,values2)
+#     # cursor.execute(query,values3)
+
+#     conn.commit()
+
+#     st.toast("Succesful ✅")
+#     Notif("success", 2.5, f"Name: {student_name} | Elective: {elective_subject} | ISA 1: {isa1} | ISA 2: {isa2} | ESA: {esa}")
+#     return True
+
+def submit_marks(conn, student_name, elective_subject, isa1, isa2, esa):
     cursor = conn.cursor(buffered=True)
     cursor.execute("USE student_marks")
-    cursor.execute("SELECT ID from student where name = %s",(student_name,))
-    student_id = (cursor.fetchall())[0][0]
-    
+    cursor.execute("SELECT ID FROM student WHERE name = %s", (student_name,))
+    student_id = cursor.fetchone()[0]
+
     print(student_id)
-    query = "INSERT INTO exam VALUES(%s, %s, %s, %s, %s)"
-    values1 = ((elective_subject[:3] + "_" + "isa1"), student_id, isa1,20031210,elective_subject)
-    values2 = ((elective_subject[:3] + "_" + "isa2"), student_id, isa2,20031210,elective_subject)
-    values3 = ((elective_subject[:3] + "_" + "esa"), student_id, esa,20031210,elective_subject)
-    cursor.execute(query,values1)
-    cursor.execute(query,values2)
-    cursor.execute(query,values3)
+
+    # Update existing rows
+    query = (
+        "UPDATE exam "
+        "SET Marks = %s "
+        "WHERE ID = %s AND Student_ID = %s AND Date_Of_Exam = %s AND Course_ID = %s"
+    )
+
+    # Update ISA 1
+    values1 = (isa1, f"{elective_subject[:3]}_isa1", student_id, "2003-12-10", elective_subject)
+    cursor.execute(query, values1)
+
+    # Update ISA 2
+    values2 = (isa2, f"{elective_subject[:3]}_isa2", student_id, "2003-12-10", elective_subject)
+    cursor.execute(query, values2)
+
+    # Update ESA
+    values3 = (esa, f"{elective_subject[:3]}_esa", student_id, "2003-12-10", elective_subject)
+    cursor.execute(query, values3)
 
     conn.commit()
 
-    st.toast("Succesful ✅")
+    st.toast("Successful ✅")
     Notif("success", 2.5, f"Name: {student_name} | Elective: {elective_subject} | ISA 1: {isa1} | ISA 2: {isa2} | ESA: {esa}")
     return True
 
