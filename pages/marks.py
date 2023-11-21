@@ -7,7 +7,6 @@ from st_pages import add_page_title
 import plost
 
 def get_marks(conn,student_name):
-
     cursor = conn.cursor(buffered=True)
     cursor.execute("USE student_marks")
     cursor.execute("SELECT ID from student where Name = %s",(student_name,))

@@ -9,33 +9,6 @@ def get_students_data(conn):
 
     cursor.execute("USE student_marks")
 
-    # TODO: use sql to get the students data
-
-    # sample
-    # students_df = conn.query("select * from students")
-
-    # temp
-    # create a sample dataframe with data
-    # students_df = pd.DataFrame(
-    #     {
-    #         "student_id": [1, 2, 3, 4, 5],
-    #         "student_name": [
-    #             "A",
-    #             "B",
-    #             "C",
-    #             "D",
-    #             "E",
-    #         ],
-    #         "student_email": [
-    #             "A@gmail.com",
-    #             "B@gmail.com",
-    #             "C@gmail.com",
-    #             "D@gmail.com",
-    #             "E@gmail.com",
-    #         ]
-    #     }
-    # )
-
     cursor.execute("SELECT * from student")
     records = cursor.fetchall()
     students_df = pd.DataFrame(records)
@@ -45,11 +18,6 @@ def get_students_data(conn):
 
 
 def students_main_func():
-    # ADDING CONNECTION HERE
-    # sample
-    # conn = st.experimental_connection("sql")
-
-    # temp
     conn = make_connection()
 
     students_df = get_students_data(conn)

@@ -9,9 +9,9 @@ def pages():
         Page("pages/create.py", "Add Marks", "📝"),
         Section("Display", icon=":mag:"),
         Page("pages/electives.py", "Electives", "📚", in_section = True ),
-        Page("pages/instructors.py", "Instructors", "👨‍🏫"),
-        Page("pages/students.py", "Students", "👨‍🎓"),
-        Page("pages/marks.py", "Marks", "📝")
+        Page("pages/instructors.py", "Instructors", "👨‍🏫",in_section = True),
+        Page("pages/students.py", "Students", "👨‍🎓",in_section = True),
+        Page("pages/marks.py", "Marks", "📝",in_section = True)
         ]
     )
 
