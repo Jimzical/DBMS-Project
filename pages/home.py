@@ -35,7 +35,6 @@ def template_files():
                 )
 
 def adding_data(conn, file,table):
-    # TODO: No clue how 
     data = []
     df = pd.read_csv(file)
     cursor = conn.cursor(buffered=True)
