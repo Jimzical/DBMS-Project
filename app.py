@@ -21,13 +21,69 @@ def create_tables():
 
     cursor.execute("CREATE DATABASE IF NOT EXISTS student_marks")
     cursor.execute("USE student_marks")
-    cursor.execute("CREATE TABLE IF NOT EXISTS student(ID varchar(20), Name varchar(50), email varchar(50), DOB DATE, PRIMARY KEY(ID))")
-    cursor.execute("CREATE TABLE IF NOT EXISTS instructor(ID int PRIMARY KEY, Name varchar(30), Dept varchar(30), Email varchar(30))")
-    cursor.execute("CREATE TABLE IF NOT EXISTS exam(ID varchar(20) PRIMARY KEY, Student_ID varchar(20), Marks int, Date_Of_Exam DATE, Course_ID varchar(20), FOREIGN KEY(Student_ID) REFERENCES Student(ID))")
-    cursor.execute("CREATE TABLE IF NOT EXISTS Course(ID varchar(50), Name varchar(30), Sem int, Capacity int, Classroom varchar(20),PRIMARY KEY(ID))")
-    cursor.execute("CREATE TABLE IF NOT EXISTS Marks_Scored(Student_ID varchar(20), Exam_ID varchar(20), Marks_Obtained int, FOREIGN KEY(Student_ID) REFERENCES Student(ID), FOREIGN KEY(Exam_ID) REFERENCES Exam(ID))")
-    cursor.execute("CREATE TABLE IF NOT EXISTS elective(Student_ID varchar(20), elective_1_ID varchar(50), elective_2_ID varchar(50), elective_3_ID varchar(50), FOREIGN KEY(student_ID) REFERENCES Student(ID), FOREIGN KEY(elective_1_ID) REFERENCES course(ID), FOREIGN KEY(elective_2_ID) REFERENCES course(ID), FOREIGN KEY(elective_3_ID) REFERENCES course(ID))")
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS student(
+            ID varchar(20), 
+            Name varchar(50), 
+            email varchar(50), 
+            DOB DATE, 
+            PRIMARY KEY(ID)
+        )
+        """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS instructor(
+            ID int PRIMARY KEY, 
+            Name varchar(30), 
+            Dept varchar(30), 
+            Email varchar(30)
+        )
+        """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS exam(
+            ID varchar(20) PRIMARY KEY, 
+            Student_ID varchar(20), 
+            Marks int, 
+            Date_Of_Exam DATE, 
+            Course_ID varchar(20), 
+            FOREIGN KEY(Student_ID) REFERENCES Student(ID)
+        )
+        """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Course(
+            ID varchar(50), 
+            Name varchar(30), 
+            Sem int, 
+            Capacity int, 
+            Classroom varchar(20),
+            PRIMARY KEY(ID)
+        )
+        """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Marks_Scored(
+            Student_ID varchar(20), 
+            Exam_ID varchar(20), 
+            Marks_Obtained int, 
+            FOREIGN KEY(Student_ID) REFERENCES Student(ID), 
+            FOREIGN KEY(Exam_ID) REFERENCES Exam(ID)
+        )
+        """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS elective(
+            Student_ID varchar(20), 
+            elective_1_ID varchar(50), 
+            elective_2_ID varchar(50), 
+            elective_3_ID varchar(50), 
+            FOREIGN KEY(student_ID) REFERENCES Student(ID), 
+            FOREIGN KEY(elective_1_ID) REFERENCES course(ID), 
+            FOREIGN KEY(elective_2_ID) REFERENCES course(ID), 
+            FOREIGN KEY(elective_3_ID) REFERENCES course(ID)
+        )
+        """)
 
     conn.commit()
 
