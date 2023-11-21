@@ -14,9 +14,6 @@ def heading():
     )
 
 def get_student_name(conn):
-    # TODO use sql to get student name
-    # sample, replace with sql code to get student name
-    # df = conn.query("select * from pet_owners")
 
     cursor = conn.cursor(buffered=True)
     cursor.execute("USE student_marks")
@@ -26,15 +23,10 @@ def get_student_name(conn):
     student_list = []
     for i in records:
         student_list.append(i[0])
-    # temp for testing pursoses
-
 
     return student_list
 
 def get_elective_subjects(conn,student_name):
-    # TODO use sql to get elective subjects for student
-    # sample, replace with sql code to get elective subjects for student
-    # df = conn.query("select * from pet_owners")
     cursor = conn.cursor(buffered=True)
     cursor.execute("USE student_marks")
     cursor.execute("SELECT ID FROM student where Name = %s",(student_name,))
@@ -51,16 +43,7 @@ def get_elective_subjects(conn,student_name):
     
     return elective_list
 
-    # temp for testing pursoses
-    # elective_subjects = ["Elective 1", "Elective 2"]
-
-    # return elective_subjects
-
 def submit_marks(conn,student_name, elective_subject, isa1, isa2, esa):
-    # TODO use sql to submit marks
-    # sample, replace with sql code to submit marks
-    # df = conn.query("select * from pet_owners")
-
     cursor = conn.cursor(buffered=True)
     cursor.execute("USE student_marks")
     cursor.execute("SELECT ID from student where name = %s",(student_name,))
@@ -77,8 +60,6 @@ def submit_marks(conn,student_name, elective_subject, isa1, isa2, esa):
 
     conn.commit()
 
-
-
     st.toast("Succesful ✅")
     Notif("success", 2.5, f"Name: {student_name} | Elective: {elective_subject} | ISA 1: {isa1} | ISA 2: {isa2} | ESA: {esa}")
     return True
@@ -87,25 +68,6 @@ def create_main_func():
     heading()
 
     conn = make_connection()
-    
-    
-    # ADDING CONNECTION HERE
-    # -----------------------------------------------------------------------------------------------------
-    # for help
-    # https://docs.streamlit.io/library/api-reference/connections/st.connections.sqlconnection
-    # https://docs.streamlit.io/library/api-reference/connections/st.experimental_connection
-    # conn = st.experimental_connection("sql")
-    # for URL based crap
-    # conn = st.experimental_connection(
-    #     "local_db",
-    #     type="sql",
-    #     url="mysql://user:pass@localhost:3306/mydb"
-    # )
-    # -----------------------------------------------------------------------------------------------------
-
-
-    # temp
-    
     
     student_list = get_student_name(conn)
     selected_student = st.selectbox("Select Student", student_list)

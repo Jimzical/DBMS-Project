@@ -14,26 +14,47 @@ def csv_template():
 
 def template_files():
     with st.expander("Download CSV Template"):
-        cl1 , cl2 , cl3 = st.columns(3)
+        cl1 , cl2 , cl3 , cl4, cl5 = st.columns(5)
         with cl1:
-            st.download_button(
-                    label="for student",
-                    data="for student",
+            with open('sample/student.csv','r') as f:
+                st.download_button(
+                    label="For student",
+                    data=f,
+                    file_name="student.csv",
                     key=randint(0,100000)
                 )
         with cl2:
-            st.download_button(
-                    label="for instructor",
-                    data="for instructor",
+            with open('sample/instructor.csv','r') as f:
+                st.download_button(
+                    label="For instructor",
+                    data=f,
+                    file_name="instructor.csv",
                     key=randint(0,100000)
                 )
         with cl3:
-            st.download_button(
-                    label="for course",
-                    data="for course",
+            with open('sample/course.csv','r') as f:
+                st.download_button(
+                    label="For course",
+                    data=f,
+                    file_name="course.csv",
                     key=randint(0,100000)
                 )
-
+        with cl4:
+            with open('sample/elective.csv','r') as f:
+                st.download_button(
+                    label="For elective",
+                    data=f,
+                    file_name="elective.csv",
+                    key=randint(0,100000)
+                )
+        with cl5:
+            with open('sample/instructor.csv','r') as f:
+                st.download_button(
+                    label="For instructor",
+                    data=f,
+                    file_name="instructor.csv",
+                    key=randint(0,100000)
+                )
 def adding_data(conn, file,table):
     data = []
     df = pd.read_csv(file)
@@ -79,8 +100,6 @@ def adding_data(conn, file,table):
 
 
 def home_main_func():
-    # TODO: Add home page content here like what its all about, how to use it, etc. 
-
     conn = make_connection()
     cursor = conn.cursor(buffered=True)
 
