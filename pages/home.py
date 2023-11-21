@@ -1,6 +1,9 @@
 import streamlit as st
-from components.helper_components import ColoredHeader, Notif
+from components.helper_components import ColoredHeader, Notif,make_connection
 from random import randint
+import csv
+import pandas as pd
+from io import StringIO
 
 def csv_template():
     with st.expander("How to Upload CSV"):
@@ -31,13 +34,56 @@ def template_files():
                     key=randint(0,100000)
                 )
 
-def adding_data(conn, csv_file, table_name):
-    # TODO: No clue how
+def adding_data(conn, file,table):
+    # TODO: No clue how 
+    data = []
+    df = pd.read_csv(file)
+    cursor = conn.cursor(buffered=True)
+    cursor.execute("USE student_marks")
+    if table == "student":  
+        for index,row in df.iterrows():
+            data.append((row['ID'],row['Name'], row['Email'], row['DOB']))
+        query = "INSERT INTO Student VALUES(%s, %s,%s,%s)"
+        for i in data:
+            cursor.execute(query,i)
+    
+    elif table == "instructor":
+        for index,row in df.iterrows():
+            data.append((row['ID'],row['Name'], row['Dept'], row['Email']))
+        query = "INSERT INTO Instructor VALUES(%s, %s,%s,%s)"
+        for i in data:
+            cursor.execute(query,i)
+    
+    elif table =='elective':
+        for index, row in df.iterrows():
+            data.append((row['student_ID'], row['elective_1_ID'], row['elective_2_ID'], row['elective_3_ID']))
+            
+        query = "INSERT INTO elective VALUES(%s,%s,%s,%s)"
+        for i in data:
+            cursor.execute(query,i)
+    
+    elif table == 'course':
+        for index, row in df.iterrows():
+            data.append((row['ID'], row['Name'], row['Sem'], row['Capacity'], row['Classroom']))
+        
+        query = "INSERT INTO course VALUES(%s,%s,%s,%s,%s)"
+        for i in data:
+        
+            cursor.execute(query,i)
+        
+
+    conn.commit()
+    st.write("Records added to",table)
+        
+
     pass
 
 
 def home_main_func():
     # TODO: Add home page content here like what its all about, how to use it, etc. 
+
+    conn = make_connection()
+    cursor = conn.cursor(buffered=True)
 
     ColoredHeader(
         label="Student Marks Management System",
@@ -48,23 +94,37 @@ def home_main_func():
     )
 
 
-    # TODO: Decide if we wanna do some crap like that. might need additional logic or we just just say fuck it and be like experimental feature so no constraint checking
+    # TODO: 
     csv_template()
     students = st.file_uploader("Upload Students CSV", type="csv")
 
     instructors = st.file_uploader("Upload Instructors CSV", type="csv")
 
-    courses = st.file_uploader("Upload Courses CSV", type="csv")
+    course = st.file_uploader("Upload Course CSV", type="csv")
+
+    elective = st.file_uploader("Upload Elective CSV", type="csv")
+
 
     st.divider()
     template_files()
 
-    submit_student = st.button("Submit")
+    submit= st.button("Submit")
 
-    if submit_student:
-        st.experimental_rerun()
+    if submit:
+        if students:
+            st.write(students)
+            adding_data(conn,students,"student")
+        elif instructors:
+            st.write(instructors)
+            adding_data(conn,instructors,"instructor")
+        elif elective:
+            st.write(elective)
+            adding_data(conn,elective,"elective")
+
+        elif course:
+            st.write(course)
+            adding_data(conn,course,"course")
         
-        adding_data()
 
 if __name__ == "__main__":
     home_main_func()

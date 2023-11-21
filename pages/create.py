@@ -1,6 +1,8 @@
 import streamlit as st
-from components.helper_components import ColoredHeader, Notif
+from components.helper_components import ColoredHeader, Notif,make_connection
 import pandas as pd
+
+
 
 def heading():
     ColoredHeader(
@@ -15,9 +17,17 @@ def get_student_name(conn):
     # TODO use sql to get student name
     # sample, replace with sql code to get student name
     # df = conn.query("select * from pet_owners")
+
+    cursor = conn.cursor(buffered=True)
+    cursor.execute("USE student_marks")
     
+    cursor.execute("SELECT name FROM student")
+    records = cursor.fetchall()
+    student_list = []
+    for i in records:
+        student_list.append(i[0])
     # temp for testing pursoses
-    student_list = ["Student 1", "Student 2", "Student 3"]
+
 
     return student_list
 
@@ -25,16 +35,48 @@ def get_elective_subjects(conn,student_name):
     # TODO use sql to get elective subjects for student
     # sample, replace with sql code to get elective subjects for student
     # df = conn.query("select * from pet_owners")
+    cursor = conn.cursor(buffered=True)
+    cursor.execute("USE student_marks")
+    cursor.execute("SELECT ID FROM student where Name = %s",(student_name,))
+    id = cursor.fetchall()
+    
+    elective_list = []
+    cursor.execute("SELECT * FROM elective WHERE student_ID = %s",id[0])
+    records = cursor.fetchall()
+    print(records)
+    for i in records:
+        elective_list.append(i[1])
+        elective_list.append(i[2])
+        elective_list.append(i[3])
+    
+    return elective_list
 
     # temp for testing pursoses
-    elective_subjects = ["Elective 1", "Elective 2"]
+    # elective_subjects = ["Elective 1", "Elective 2"]
 
-    return elective_subjects
+    # return elective_subjects
 
 def submit_marks(conn,student_name, elective_subject, isa1, isa2, esa):
     # TODO use sql to submit marks
     # sample, replace with sql code to submit marks
     # df = conn.query("select * from pet_owners")
+
+    cursor = conn.cursor(buffered=True)
+    cursor.execute("USE student_marks")
+    cursor.execute("SELECT ID from student where name = %s",(student_name,))
+    student_id = (cursor.fetchall())[0][0]
+    
+    print(student_id)
+    query = "INSERT INTO exam VALUES(%s, %s, %s, %s, %s)"
+    values1 = ((elective_subject[:3] + "_" + "isa1"), student_id, isa1,20031210,elective_subject)
+    values2 = ((elective_subject[:3] + "_" + "isa2"), student_id, isa2,20031210,elective_subject)
+    values3 = ((elective_subject[:3] + "_" + "esa"), student_id, esa,20031210,elective_subject)
+    cursor.execute(query,values1)
+    cursor.execute(query,values2)
+    cursor.execute(query,values3)
+
+    conn.commit()
+
 
 
     st.toast("Succesful ✅")
@@ -44,6 +86,8 @@ def submit_marks(conn,student_name, elective_subject, isa1, isa2, esa):
 def create_main_func():
     heading()
 
+    conn = make_connection()
+    
     
     # ADDING CONNECTION HERE
     # -----------------------------------------------------------------------------------------------------
@@ -61,7 +105,7 @@ def create_main_func():
 
 
     # temp
-    conn = 1
+    
     
     student_list = get_student_name(conn)
     selected_student = st.selectbox("Select Student", student_list)

@@ -1,5 +1,24 @@
 import streamlit as st
 from time import sleep
+import mysql.connector 
+
+
+def make_connection():
+    try:
+
+        conn = mysql.connector.connect(host = "localhost",
+                                    
+                                    user="root",
+                                    password="123456789")
+
+        if conn.is_connected():
+            print("Connection successful")
+            return conn
+    except ConnectionError as e:
+        print("Error while connecting to MySQL",e)
+    
+        
+
 
 def ColoredHeader(label : str = "Cool title",description : str = "Cool description",color_name : str = "gold",help : str = "", description_help : str = "") -> None:
     """

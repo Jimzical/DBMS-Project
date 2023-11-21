@@ -1,5 +1,5 @@
 import streamlit as st
-from components.helper_components import ColoredHeader
+from components.helper_components import ColoredHeader, make_connection
 import pandas as pd
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 from pages.create import get_student_name
@@ -7,6 +7,38 @@ from st_pages import add_page_title
 import plost
 
 def get_marks(conn,student_name):
+
+    cursor = conn.cursor(buffered=True)
+    cursor.execute("USE student_marks")
+    cursor.execute("SELECT ID from student where Name = %s",(student_name,))
+    id = cursor.fetchall()[0][0]
+    cursor.execute("SELECT DISTINCT Course_ID from exam where student_id = %s",(id,))
+    subjects = cursor.fetchall()
+    subject_list = [i[0] for i in subjects]
+    subject_marks = {}
+    subject_marks['Exam'] = ['ESA','ISA1','ISA2']
+
+    for i in subject_list:
+
+        cursor.execute("SELECT ID,Marks from Exam where course_id = %s",(i,))
+        records = cursor.fetchall()
+        marks_list = []
+        for j in records:
+            marks_list.append(records[1][1])
+        subject_marks[i] = marks_list
+    print(subject_marks)
+
+    df = pd.DataFrame(subject_marks)
+    print(df)
+    return df
+
+            
+            
+       
+    
+
+   
+    
     # TODO: use sql to get the marks data
 
     # sample
@@ -37,7 +69,7 @@ def get_marks(conn,student_name):
         }
     )
 
-    return marks_df
+    #return marks_df
 
 def for_multiple_electives(df):
     # probaby wont need it anymore
@@ -79,9 +111,16 @@ def for_multiple_electives(df):
     )
 
 def for_few_electives(df):
-    for item,row in df.iterrows():
-        st.subheader(row["elective_subject"])
-        temp = pd.DataFrame(columns=["Exam","Marks"],data=[["isa1",row["isa1"]],["isa2",row["isa2"]],["esa",row["esa"]]])
+    subjects = []
+    for i in df.columns: 
+        subjects.append(i)
+    subjects = subjects[1::]
+    print(subjects)
+    
+    
+    for i in subjects:
+        st.subheader(i)
+        temp = pd.DataFrame(columns = ["Exam","Marks"],data = [["ESA",df[i][0]], ["ISA 1",df[i][1]], ["ISA 2",df[i][2]]])
         plost.bar_chart(
             data=temp,
             bar="Exam",
@@ -91,8 +130,24 @@ def for_few_electives(df):
             height=500,
             width=1000,
             opacity=0.8,
-            # use_container_width=True,
+            use_container_width=True,
         )
+
+        
+        
+        # st.subheader(row["elective_subject"])
+        # temp = pd.DataFrame(columns=["Exam","Marks"],data=[["ESA",row["isa1"]],["isa2",row["isa2"]],["esa",row["esa"]]])
+        # plost.bar_chart(
+        #     data=temp,
+        #     bar="Exam",
+        #     value="Marks",
+        #     title="Marks",
+        #     color="Exam",
+        #     height=500,
+        #     width=1000,
+        #     opacity=0.8,
+        #     # use_container_width=True,
+        # )
     pass
 def marks_main_func():
     # ADDING CONNECTION HERE
@@ -100,7 +155,9 @@ def marks_main_func():
     # conn = st.experimental_connection("sql")
 
     # temp
-    conn = None
+    conn = make_connection()
+    cursor = conn.cursor(buffered=True)
+    
 
     st.subheader("Select Student")
     student_list = get_student_name(conn)

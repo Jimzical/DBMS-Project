@@ -1,11 +1,19 @@
 import streamlit as st
 from st_pages import add_page_title
-from components.helper_components import ColoredHeader
+from components.helper_components import ColoredHeader, make_connection
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 from st_pages import add_page_title, add_indentation
 
 import pandas as pd
 def get_elective_date(conn):
+    cursor = conn.cursor(buffered=True)
+    cursor.execute("Use student_marks")
+    cursor.execute("SELECT * FROM Course ")
+    records = cursor.fetchall()
+    columns = ['Course ID','Course Name','Semester', 'Capacity', 'Classroom']
+    df = pd.DataFrame(records)
+    df.columns = columns
+    return df
     # TODO: use sql to get the elective data
 
     # sample
@@ -57,8 +65,11 @@ def electives_main_func():
     # sample
     # conn = st.experimental_connection("sql")	
 
+    conn = make_connection()
+
+
     # temp
-    conn = None
+    
     elective_df = get_elective_date(conn)
 
     df = dataframe_explorer(elective_df)
