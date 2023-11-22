@@ -6,8 +6,8 @@ import pandas as pd
 
 def heading():
     ColoredHeader(
-        label="Add Marks 📝",
-        description="Add marks for a student",
+        label="Update Marks 📝",
+        description="Update marks for a student",
         color_name="gold",
         help="",
         description_help=""
