@@ -16,17 +16,19 @@ def get_marks(conn,student_name):
     subject_list = [i[0] for i in subjects]
     subject_marks = {}
     subject_marks['Exam'] = ['ISA1','ISA2','ESA']
-
+    print(subject_list)
     for i in subject_list:
 
         cursor.execute("SELECT ID,Marks from Exam where course_id = %s",(i,))
         records = cursor.fetchall()
+        print(i, records)
         marks_list = []
         for j in records:
             marks_list.append(j[1])
         subject_marks[i] = marks_list
     print(subject_marks)
 
+    print(subject_marks)
     df = pd.DataFrame(subject_marks)
     print(df)
     return df
@@ -164,14 +166,14 @@ def marks_main_func():
 
     marks_df = get_marks(conn,student_name)
 
-    df = dataframe_explorer(marks_df)
-    st.dataframe(df, use_container_width=True)
+    # df = dataframe_explorer(marks_df)
+    # st.dataframe(df, use_container_width=True)
     
-    st.divider()
-    with st.expander("Bar Graphs",expanded=True):
-        st.title("Best Visualisation for Few Electives")
-        for_few_electives(df)
-        # for_multiple_electives(df)
+    # st.divider()
+    # with st.expander("Bar Graphs",expanded=True):
+    #     st.title("Best Visualisation for Few Electives")
+    #     for_few_electives(df)
+    #     # for_multiple_electives(df)
 
 if __name__ == "__main__":
     add_page_title(layout="wide")
