@@ -15,7 +15,7 @@ def get_marks(conn,student_name):
     subjects = cursor.fetchall()
     subject_list = [i[0] for i in subjects]
     subject_marks = {}
-    subject_marks['Exam'] = ['ESA','ISA1','ISA2']
+    subject_marks['Exam'] = ['ISA1','ISA2','ESA']
 
     for i in subject_list:
 
@@ -79,7 +79,7 @@ def for_few_electives(df):
     
     for i in subjects:
         st.subheader(i)
-        temp = pd.DataFrame(columns = ["Exam","Marks"],data = [["ESA",df[i][0]], ["ISA 1",df[i][1]], ["ISA 2",df[i][2]]])
+        temp = pd.DataFrame(columns = ["Exam","Marks"],data = [["ISA 1",df[i][0]], ["ISA 2",df[i][1]], ["ESA",df[i][2]]])
         plost.bar_chart(
             data=temp,
             bar="Exam",

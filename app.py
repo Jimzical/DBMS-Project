@@ -16,6 +16,65 @@ def pages():
         ]
     )
 
+def does_trigger_exist():
+    conn = make_connection()
+    cursor = conn.cursor(buffered=True)
+    cursor.execute("USE student_marks")
+    cursor.execute("SHOW TRIGGERS LIKE 'decrement_capacity_trigger'")
+    conn.close()
+    return cursor.fetchone() is not None
+
+
+def set_trigger():
+    print("ENTERED SET TRIGGER FUNCTION----")
+    conn = make_connection()
+    cursor = conn.cursor(buffered=True)
+    cursor.execute("USE student_marks")
+    trigger_exists = does_trigger_exist()
+    try: 
+
+        
+        if not trigger_exists:
+            print("Trigger does not exist, creating...")
+            trigger_creation = '''
+            
+
+            CREATE TRIGGER decrement_capacity_trigger
+            AFTER INSERT ON elective
+            FOR EACH ROW
+            BEGIN
+                -- Decrease the capacity of the enrolled elective in the course table
+                UPDATE course
+                SET Capacity = Capacity - 1
+                WHERE ID = NEW.elective_1_ID;
+
+                UPDATE course
+                SET Capacity = Capacity - 1
+                WHERE ID = NEW.elective_2_ID;
+
+                UPDATE course
+                SET Capacity = Capacity - 1
+                WHERE ID = NEW.elective_3_ID;
+            END 
+
+            
+        '''
+            cursor.execute(trigger_creation)
+            
+        print("Trigger succesfully created.")
+
+        
+    except:
+        print("Trigger already exists")
+    
+
+    
+    conn.commit()
+    conn.close()
+    return
+
+
+
 def create_tables():
     conn = make_connection()
     cursor = conn.cursor(buffered=True)
@@ -62,15 +121,15 @@ def create_tables():
         )
         """)
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Marks_Scored(
-            Student_ID varchar(20), 
-            Exam_ID varchar(20), 
-            Marks_Obtained int, 
-            FOREIGN KEY(Student_ID) REFERENCES Student(ID), 
-            FOREIGN KEY(Exam_ID) REFERENCES Exam(ID)
-        )
-        """)
+    # cursor.execute("""
+    #     CREATE TABLE IF NOT EXISTS Marks_Scored(
+    #         Student_ID varchar(20), 
+    #         Exam_ID varchar(20), 
+    #         Marks_Obtained int, 
+    #         FOREIGN KEY(Student_ID) REFERENCES Student(ID), 
+    #         FOREIGN KEY(Exam_ID) REFERENCES Exam(ID)
+    #     )
+    #     """)
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS elective(
@@ -86,12 +145,14 @@ def create_tables():
         """)
 
     conn.commit()
+    conn.close()
 
 
 
 def main():
     # home_main_func()
     create_tables()
+    set_trigger()
     pages()
 
    
