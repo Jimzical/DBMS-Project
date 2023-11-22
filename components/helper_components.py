@@ -9,7 +9,7 @@ def make_connection():
         conn = mysql.connector.connect(host = "localhost",
                                     
                                     user="root",
-                                    password="root")
+                                    password="123456789")
 
         if conn.is_connected():
             print("Connection successful")

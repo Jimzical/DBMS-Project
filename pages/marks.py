@@ -23,7 +23,7 @@ def get_marks(conn,student_name):
         records = cursor.fetchall()
         marks_list = []
         for j in records:
-            marks_list.append(records[1][1])
+            marks_list.append(j[1])
         subject_marks[i] = marks_list
     print(subject_marks)
 
