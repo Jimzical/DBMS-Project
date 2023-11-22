@@ -67,14 +67,14 @@ def adding_data(conn, file,table):
         for i in data:
             cursor.execute(query,i)
     
-    elif table == "instructor":
+    if table == "instructor":
         for index,row in df.iterrows():
             data.append((row['ID'],row['Name'], row['Dept'], row['Email']))
         query = "INSERT INTO Instructor VALUES(%s, %s,%s,%s)"
         for i in data:
             cursor.execute(query,i)
     
-    elif table =='elective':
+    if table =='elective':
         for index, row in df.iterrows():
             data.append((row['student_ID'], row['elective_1_ID'], row['elective_2_ID'], row['elective_3_ID']))
             
@@ -82,7 +82,7 @@ def adding_data(conn, file,table):
         for i in data:
             cursor.execute(query,i)
     
-    elif table == 'course':
+    if table == 'course':
         for index, row in df.iterrows():
             data.append((row['ID'], row['Name'], row['Sem'], row['Capacity'], row['Classroom']))
         
@@ -93,8 +93,7 @@ def adding_data(conn, file,table):
         
 
     conn.commit()
-    st.write("Records added to",table)
-        
+    st.success(f"Records added to {table}")
 
     pass
 
@@ -141,37 +140,7 @@ def home_main_func():
             st.write(course)
             adding_data(conn,course,"course")
 
-def table_display():
-    conn = make_connection()
-    cursor = conn.cursor(buffered=True)
-    cursor.execute("USE student_marks")
 
-    st.subheader("Student Table")
-    # convert to df
-    df = pd.read_sql("SELECT * FROM student", conn, index_col="ID")
-    st.dataframe(df)
 
-    st.subheader("Instructor Table")
-    df = pd.read_sql("SELECT * FROM instructor", conn, index_col="ID")
-    st.dataframe(df)
-
-    st.subheader("Course Table")
-    df = pd.read_sql("SELECT * FROM course", conn, index_col="ID")
-    st.dataframe(df)
-
-    st.subheader("Elective Table")
-    df = pd.read_sql("SELECT * FROM elective", conn, index_col="Student_ID")
-    st.dataframe(df)
-
-    st.subheader("Exam Table")
-    df = pd.read_sql("SELECT * FROM exam", conn, index_col="ID")
-    st.dataframe(df)
-
-    # st.subheader("Marks Table")
-    # df = pd.read_sql("SELECT * FROM marks_scored", conn, index_col=None)
-    # st.dataframe(df)
-    
 if __name__ == "__main__":
     home_main_func()
-    with st.expander("Display"):
-        table_display()

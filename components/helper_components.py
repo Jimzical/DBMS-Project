@@ -20,7 +20,7 @@ def make_connection():
         
 
 
-def ColoredHeader(label : str = "Cool title",description : str = "Cool description",color_name : str = "gold",help : str = "", description_help : str = "") -> None:
+def ColoredHeader(label : str = "Cool title",description : str = " ",color_name : str = "gold",help : str = "", description_help : str = "") -> None:
     """
     -------------------------------------------
     Shows a header with a colored underline and an optional description.
