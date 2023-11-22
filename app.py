@@ -7,6 +7,7 @@ def pages():
         [
         Page("pages/home.py", "Home", "🏠"),
         Page("pages/create.py", "Add Marks", "📝"),
+        Page("pages/delete.py", "Delete Marks", "🗑️"),
         Section("Display", icon=":mag:"),
         Page("pages/electives.py", "Electives", "📚", in_section = True ),
         Page("pages/instructors.py", "Instructors", "👨‍🏫",in_section = True),

@@ -14,11 +14,11 @@ def csv_template():
 
 def template_files():
     with st.expander("Download CSV Template"):
-        cl1 , cl2 , cl3 , cl4, cl5 = st.columns(5)
+        cl1 , cl2 , cl3 , cl4 = st.columns(4)
         with cl1:
             with open('sample/student.csv','r') as f:
                 st.download_button(
-                    label="For student",
+                    label="For Student",
                     data=f,
                     file_name="student.csv",
                     key=randint(0,100000)
@@ -26,7 +26,7 @@ def template_files():
         with cl2:
             with open('sample/instructor.csv','r') as f:
                 st.download_button(
-                    label="For instructor",
+                    label="For Instructor",
                     data=f,
                     file_name="instructor.csv",
                     key=randint(0,100000)
@@ -34,7 +34,7 @@ def template_files():
         with cl3:
             with open('sample/course.csv','r') as f:
                 st.download_button(
-                    label="For course",
+                    label="For Course",
                     data=f,
                     file_name="course.csv",
                     key=randint(0,100000)
@@ -42,19 +42,19 @@ def template_files():
         with cl4:
             with open('sample/elective.csv','r') as f:
                 st.download_button(
-                    label="For elective",
+                    label="For Elective",
                     data=f,
                     file_name="elective.csv",
                     key=randint(0,100000)
                 )
-        with cl5:
-            with open('sample/instructor.csv','r') as f:
-                st.download_button(
-                    label="For instructor",
-                    data=f,
-                    file_name="instructor.csv",
-                    key=randint(0,100000)
-                )
+        # with cl5:
+        #     with open('sample/instructor.csv','r') as f:
+        #         st.download_button(
+        #             label="For instructor",
+        #             data=f,
+        #             file_name="instructor.csv",
+        #             key=randint(0,100000)
+        #         )
 def adding_data(conn, file,table):
     data = []
     df = pd.read_csv(file)
@@ -112,7 +112,6 @@ def home_main_func():
     )
 
 
-    # TODO: 
     csv_template()
     students = st.file_uploader("Upload Students CSV", type="csv")
 
@@ -132,17 +131,47 @@ def home_main_func():
         if students:
             st.write(students)
             adding_data(conn,students,"student")
-        elif instructors:
+        if instructors:
             st.write(instructors)
             adding_data(conn,instructors,"instructor")
-        elif elective:
+        if elective:
             st.write(elective)
             adding_data(conn,elective,"elective")
-
-        elif course:
+        if course:
             st.write(course)
             adding_data(conn,course,"course")
-        
 
+def table_display():
+    conn = make_connection()
+    cursor = conn.cursor(buffered=True)
+    cursor.execute("USE student_marks")
+
+    st.subheader("Student Table")
+    # convert to df
+    df = pd.read_sql("SELECT * FROM student", conn, index_col="ID")
+    st.dataframe(df)
+
+    st.subheader("Instructor Table")
+    df = pd.read_sql("SELECT * FROM instructor", conn, index_col="ID")
+    st.dataframe(df)
+
+    st.subheader("Course Table")
+    df = pd.read_sql("SELECT * FROM course", conn, index_col="ID")
+    st.dataframe(df)
+
+    st.subheader("Elective Table")
+    df = pd.read_sql("SELECT * FROM elective", conn, index_col="Student_ID")
+    st.dataframe(df)
+
+    st.subheader("Exam Table")
+    df = pd.read_sql("SELECT * FROM exam", conn, index_col="ID")
+    st.dataframe(df)
+
+    # st.subheader("Marks Table")
+    # df = pd.read_sql("SELECT * FROM marks_scored", conn, index_col=None)
+    # st.dataframe(df)
+    
 if __name__ == "__main__":
     home_main_func()
+    with st.expander("Display"):
+        table_display()
