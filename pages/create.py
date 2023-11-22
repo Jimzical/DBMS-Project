@@ -79,16 +79,14 @@ def submit_marks(conn, student_name, elective_subject, isa1, isa2, esa):
     #     esa: {esa}
     # ''')
 
-    # Update existing rows
-    query = (
-        "UPDATE exam "
-        "SET Marks = %d "
-        "WHERE ID = %s AND Student_ID = %s AND Date_Of_Exam = %s AND Course_ID = %s"
-    )
+    # # Update existing rows
+    # query = (
+    #     "UPDATE exam "
+    #     "SET Marks = %d "
+    #     "WHERE ID = %s AND Student_ID = %s AND Date_Of_Exam = %s AND Course_ID = %s"
+    # )
 
-    # Update ISA 1
-    val1 = (isa1, f"{elective_subject[:3]}_isa1", student_id, "2003-12-10", elective_subject)
-    # # Update ISA 1
+    # # Update ISA 1  
     # values1 = (isa1, f"{elective_subject[:3]}_isa1", student_id, "2003-12-10", elective_subject)
     # cursor.execute(query, values1)
 
@@ -99,6 +97,24 @@ def submit_marks(conn, student_name, elective_subject, isa1, isa2, esa):
     # # Update ESA
     # values3 = (esa, f"{elective_subject[:3]}_esa", student_id, "2003-12-10", elective_subject)
     # cursor.execute(query, values3)
+    # Update existing rows
+    query = (
+        "UPDATE exam "
+        "SET Marks = %s "
+        "WHERE ID = %s AND Student_ID = %s AND Course_ID = %s"
+    )
+
+    # Update ISA 1  
+    values1 = (isa1, f"{elective_subject[:3]}_isa1", student_id, elective_subject)
+    cursor.execute(query, values1)
+
+    # Update ISA 2
+    values2 = (isa2, f"{elective_subject[:3]}_isa2", student_id, elective_subject)
+    cursor.execute(query, values2)
+
+    # Update ESA
+    values3 = (esa, f"{elective_subject[:3]}_esa", student_id, elective_subject)
+    cursor.execute(query, values3)
 
     conn.commit()
 

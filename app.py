@@ -40,10 +40,9 @@ def create_tables():
             Email varchar(30)
         )
         """)
-
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS exam(
-            ID varchar(20) PRIMARY KEY, 
+            ID varchar(20), 
             Student_ID varchar(20), 
             Marks int, 
             Date_Of_Exam DATE, 

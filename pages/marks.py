@@ -31,45 +31,6 @@ def get_marks(conn,student_name):
     print(df)
     return df
 
-            
-            
-       
-    
-
-   
-    
-    # TODO: use sql to get the marks data
-
-    # sample
-    # marks_df = conn.query("select * from marks")
-
-    # temp
-    # create a sample dataframe with data
-    marks_df = pd.DataFrame(
-        {
-            "student_id": [1, 2, 3, 4, 5],
-            "student_name": [
-                "A",
-                "B",
-                "C",
-                "D",
-                "E",
-            ],
-            "elective_subject": [
-                "Python",
-                "Machine Learning",
-                "Data Science",
-                "Data Visualization",
-                "Data Analytics",
-            ],
-            "isa1": [46, 20, 93, 18, 94],
-            "isa2": [80,51, 55, 38, 53],
-            "esa": [14, 80, 67, 78, 70],
-        }
-    )
-
-    #return marks_df
-
 def for_multiple_electives(df):
     # probaby wont need it anymore
     
@@ -116,7 +77,6 @@ def for_few_electives(df):
     subjects = subjects[1::]
     print(subjects)
     
-    
     for i in subjects:
         st.subheader(i)
         temp = pd.DataFrame(columns = ["Exam","Marks"],data = [["ESA",df[i][0]], ["ISA 1",df[i][1]], ["ISA 2",df[i][2]]])
@@ -149,11 +109,6 @@ def for_few_electives(df):
         # )
     pass
 def marks_main_func():
-    # ADDING CONNECTION HERE
-    # sample
-    # conn = st.experimental_connection("sql")
-
-    # temp
     conn = make_connection()
     cursor = conn.cursor(buffered=True)
     
