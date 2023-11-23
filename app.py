@@ -6,7 +6,8 @@ def pages():
     show_pages(
         [
         Page("pages/home.py", "Home", "🏠"),
-        Page("pages/create.py", "Add Marks", "📝"),
+        Page("pages/add_marks.py", "Add Marks", "📝"),
+        Page("pages/create.py","Update Marks", "📝"),
         Page("pages/delete.py", "Delete Items", "🗑️"),
         Page("pages/display.py","Display", icon=":mag:"),
         Page("pages/electives.py", "Electives", "📚", in_section = True ),
