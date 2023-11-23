@@ -6,10 +6,9 @@ def pages():
     show_pages(
         [
         Page("pages/home.py", "Home", "🏠"),
-        Page("pages/add_marks.py","Add Marks","📝"),
-        Page("pages/create.py", "Update Marks", "📝"),
-        Page("pages/delete.py", "Delete Marks", "🗑️"),
-        Section("Display", icon=":mag:"),
+        Page("pages/create.py", "Add Marks", "📝"),
+        Page("pages/delete.py", "Delete Items", "🗑️"),
+        Page("pages/display.py","Display", icon=":mag:"),
         Page("pages/electives.py", "Electives", "📚", in_section = True ),
         Page("pages/instructors.py", "Instructors", "👨‍🏫",in_section = True),
         Page("pages/students.py", "Students", "👨‍🎓",in_section = True),
@@ -100,7 +99,6 @@ def create_tables():
             Email varchar(30)
         )
         """)
-
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS exam(
             ID varchar(20), 
@@ -108,7 +106,7 @@ def create_tables():
             Marks int, 
             Date_Of_Exam DATE, 
             Course_ID varchar(20), 
-            FOREIGN KEY(Student_ID) REFERENCES Student(ID)
+            FOREIGN KEY(Student_ID) REFERENCES Student(ID) ON DELETE CASCADE
         )
         """)
 
@@ -123,26 +121,16 @@ def create_tables():
         )
         """)
 
-    # cursor.execute("""
-    #     CREATE TABLE IF NOT EXISTS Marks_Scored(
-    #         Student_ID varchar(20), 
-    #         Exam_ID varchar(20), 
-    #         Marks_Obtained int, 
-    #         FOREIGN KEY(Student_ID) REFERENCES Student(ID), 
-    #         FOREIGN KEY(Exam_ID) REFERENCES Exam(ID)
-    #     )
-    #     """)
-
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS elective(
             Student_ID varchar(20), 
             elective_1_ID varchar(50), 
             elective_2_ID varchar(50), 
             elective_3_ID varchar(50), 
-            FOREIGN KEY(student_ID) REFERENCES Student(ID), 
-            FOREIGN KEY(elective_1_ID) REFERENCES course(ID), 
-            FOREIGN KEY(elective_2_ID) REFERENCES course(ID), 
-            FOREIGN KEY(elective_3_ID) REFERENCES course(ID)
+            FOREIGN KEY(student_ID) REFERENCES Student(ID) ON DELETE CASCADE, 
+            FOREIGN KEY(elective_1_ID) REFERENCES course(ID) ON DELETE CASCADE, 
+            FOREIGN KEY(elective_2_ID) REFERENCES course(ID) ON DELETE CASCADE, 
+            FOREIGN KEY(elective_3_ID) REFERENCES course(ID) ON DELETE CASCADE
         )
         """)
 
