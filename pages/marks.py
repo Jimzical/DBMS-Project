@@ -122,6 +122,43 @@ def for_few_electives(df):
         #     # use_container_width=True,
         # )
     pass
+
+# def calculate_avg_marks(course_code):
+#     conn = make_connection()
+#     cursor = conn.cursor()
+#     cursor.execute("USE student_marks")
+
+#     query = f"SELECT AVG(marks) AS avg_marks FROM exam WHERE course_id = '{course_code}'"
+    
+#     cursor.execute(query)
+#     result = cursor.fetchone()
+
+#     conn.close()
+
+#     if result and result[0] is not None:
+#         avg_marks = result[0]
+#         return pd.DataFrame({'Course Code': [course_code], 'Average Marks': [avg_marks]})
+#     else:
+#         return pd.DataFrame({'Course Code': [course_code], 'Average Marks': [None]})
+def calculate_avg_marks(course_code):
+    conn = make_connection()
+    cursor = conn.cursor()
+    cursor.execute("USE student_marks")
+
+    query = f"SELECT AVG(marks) AS avg_marks FROM exam WHERE course_id = '{course_code}'"
+    
+    cursor.execute(query)
+    result = cursor.fetchone()
+
+    conn.close()
+
+    if result and result[0] is not None:
+        avg_marks = result[0]
+        return pd.DataFrame({'Course Code': [course_code], 'Average Marks': [avg_marks]})
+    else:
+        return pd.DataFrame({'Course Code': [course_code], 'Average Marks': [None]})
+
+
 def marks_main_func():
     conn = make_connection()
     cursor = conn.cursor(buffered=True)
@@ -132,14 +169,18 @@ def marks_main_func():
     student_name = st.selectbox("Select Student", student_list)
 
     marks_df = get_marks(conn,student_name)
+    st.dataframe(marks_df, use_container_width=True)
 
-    df = dataframe_explorer(marks_df)
-    st.dataframe(df, use_container_width=True)
-    
+    st.subheader("Stats")
+    # st.write(marks_df.describe())
+    # check if marks_df has more than one col
+    if len(marks_df.columns) > 1:
+        for i in marks_df.columns[1::]:
+            st.dataframe(calculate_avg_marks(i))
     st.divider()
     with st.expander("Bar Graphs",expanded=True):
-        st.title("Best Visualisation for Few Electives")
-        for_few_electives(df)
+        st.title("Visualisation for Electives")
+        for_few_electives(marks_df)
         # for_multiple_electives(df)
     
 

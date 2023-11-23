@@ -13,7 +13,7 @@ def heading():
 def deleting_mechanics():
     option = st.selectbox(
         label='''Choose What you want to delete''',
-        options=['Student Table', 'Instructor Table', 'Course Table', 'Elective Table',"Delete All"]
+        options=['Student Table', 'Instructor Table', 'Course Table', 'Elective Table','Exam Table',"Delete All"]
     )
 
     if option == 'Student Table':
@@ -57,6 +57,17 @@ def deleting_mechanics():
             cursor = conn.cursor(buffered=True)
             cursor.execute("USE student_marks")
             cursor.execute("DELETE FROM elective WHERE Student_ID = %s", (id,))
+            conn.commit()
+            conn.close()
+            st.success("Deleted Successfully")
+    elif option == 'Exam Table':
+        st.write("Enter the ID of the Exam you want to delete")
+        id = st.text_input(label="Student_ID")
+        if st.button(label="Delete"):
+            conn = make_connection()
+            cursor = conn.cursor(buffered=True)
+            cursor.execute("USE student_marks")
+            cursor.execute("DELETE FROM exam WHERE Student_ID = %s", (id,))
             conn.commit()
             conn.close()
             st.success("Deleted Successfully")
