@@ -15,6 +15,16 @@ def table_display():
     cursor.execute(f"DESCRIBE {table_name}")
     columns = [column[0] for column in cursor.fetchall()]
 
+    # cursor.execute("""
+    #     SELECT Exam.ID, Exam.Student_ID, Exam.Marks, Exam.Course_ID, Instructor.Name FROM Exam INNER JOIN Instructor ON Exam.Course_ID = Instructor.Course_ID 
+    #                """)
+    # records = cursor.fetchall()
+    # print(records)
+    # df = pd.DataFrame()
+    # st.dataframe(df)
+    #     
+    
+
     # Fetch records
     cursor.callproc('DisplayTableRecords', (table_name,))
     for result in cursor.stored_results():
@@ -25,6 +35,8 @@ def table_display():
         
         # Display DataFrame in Streamlit
         st.dataframe(df)
+    
+
 
     
     # st.subheader("Student Table")
@@ -53,7 +65,12 @@ def table_display():
     # st.dataframe(df)
     # st.divider()
 
-    # conn.close()
+    st.subheader("Exam with Join function")
+    df = pd.read_sql("SELECT Exam.ID, Exam.Student_ID, Exam.Marks, Exam.Course_ID, Instructor.Name FROM Exam INNER JOIN Instructor ON Exam.Course_ID = Instructor.Course_ID ", conn)
+    st.dataframe(df)
+    st.divider()
+
+    conn.close()
     
 
 if __name__ == "__main__":

@@ -92,14 +92,8 @@ def create_tables():
         )
         """)
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS instructor(
-            ID int PRIMARY KEY, 
-            Name varchar(30), 
-            Dept varchar(30), 
-            Email varchar(30)
-        )
-        """)
+    
+    
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS exam(
             ID varchar(20), 
@@ -121,6 +115,16 @@ def create_tables():
             PRIMARY KEY(ID)
         )
         """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS instructor(
+            ID int PRIMARY KEY, 
+            Name varchar(30), 
+            Dept varchar(30), 
+            Email varchar(30),
+            Course_ID varchar(20)
+            
+        )
+        """)
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS elective(
@@ -134,6 +138,15 @@ def create_tables():
             FOREIGN KEY(elective_3_ID) REFERENCES course(ID) ON DELETE CASCADE
         )
         """)
+    
+    cursor.execute('''
+                   CREATE TABLE IF NOT EXISTS DetailedExam(
+                    Name VARCHAR(255),
+                    ID Varchar(20),
+                    Student_ID Varchar(20),
+                    Marks INT,
+                    Course_ID Varchar(20))
+                   ''')
 
     conn.commit()
     conn.close()

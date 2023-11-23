@@ -13,7 +13,7 @@ def get_instructors_data(conn):
 
     print(records)
     instructors_df = pd.DataFrame(records)
-    instructors_df.columns = ['ID', 'Name', 'Department', 'Email']
+    instructors_df.columns = ['ID', 'Name', 'Department', 'Email','Course_ID']
     
     return instructors_df
 

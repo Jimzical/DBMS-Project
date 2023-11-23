@@ -69,8 +69,8 @@ def adding_data(conn, file,table):
     
     if table == "instructor":
         for index,row in df.iterrows():
-            data.append((row['ID'],row['Name'], row['Dept'], row['Email']))
-        query = "INSERT INTO Instructor VALUES(%s, %s,%s,%s)"
+            data.append((row['ID'],row['Name'], row['Dept'], row['Email'], row['Course_ID']))
+        query = "INSERT INTO Instructor VALUES(%s, %s,%s,%s, %s)"
         for i in data:
             cursor.execute(query,i)
     
