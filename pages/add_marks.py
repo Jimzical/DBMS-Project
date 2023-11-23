@@ -6,8 +6,8 @@ import pandas as pd
 
 def heading():
     ColoredHeader(
-        label="Update Marks 📝",
-        description="Update marks for a student",
+        label="Add Marks 📝",
+        description="Add marks for a student",
         color_name="gold",
         help="",
         description_help=""
@@ -68,28 +68,25 @@ def get_elective_subjects(conn,student_name):
 def submit_marks(conn, student_name, elective_subject, isa1, isa2, esa):
     cursor = conn.cursor(buffered=True)
     cursor.execute("USE student_marks")
-    cursor.execute("SELECT ID FROM student WHERE name = %s", (student_name,))
-    student_id = cursor.fetchone()[0]
+    cursor.execute("SELECT ID from student where name = %s",(student_name,))
+    student_id = (cursor.fetchall())[0][0]
+    print("INSIDE submit_marks - ",student_id)
+    print(student_id)
+    query = "INSERT INTO exam VALUES(%s, %s, %s, %s, %s)"
+    values1 = ((elective_subject[:3] + "_" + "isa1"), student_id, isa1,20031210,elective_subject)
+    values2 = ((elective_subject[:3] + "_" + "isa2"), student_id, isa2,20031210,elective_subject)
+    values3 = ((elective_subject[:3] + "_" + "esa"), student_id, esa,20031210,elective_subject)
+    print(values1)
+    print(values2)
+    print(values3)
+    
+    cursor.execute(query,values1)
+    cursor.execute(query,values2)
+    cursor.execute(query,values3)
 
-    # Update existing rows
-    query = (
-        "UPDATE exam "
-        "SET Marks = %s "
-        "WHERE ID = %s AND Student_ID = %s AND Course_ID = %s"
-    )
-
-    # Update ISA 1
-    values1 = (isa1, f"{elective_subject[:3]}_isa1", student_id, elective_subject)
-    cursor.execute(query, values1)
-
-    # Update ISA 2
-    values2 = (isa2, f"{elective_subject[:3]}_isa2", student_id, elective_subject)
-    cursor.execute(query, values2)
-
-    # Update ESA
-    values3 = (esa, f"{elective_subject[:3]}_esa", student_id, elective_subject)
-    cursor.execute(query, values3)
-
+    
+ 
+    
     conn.commit()
 
     st.toast("Successful ✅")

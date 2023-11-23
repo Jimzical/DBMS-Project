@@ -1,47 +1,24 @@
 import streamlit as st
-from components.helper_components import ColoredHeader
+from components.helper_components import ColoredHeader,make_connection
 from streamlit_extras.dataframe_explorer import dataframe_explorer
 import pandas as pd
 from st_pages import add_page_title, add_indentation
 
 def get_students_data(conn):
-    # TODO: use sql to get the students data
+    cursor = conn.cursor(buffered=True)
 
-    # sample
-    # students_df = conn.query("select * from students")
+    cursor.execute("USE student_marks")
 
-    # temp
-    # create a sample dataframe with data
-    students_df = pd.DataFrame(
-        {
-            "student_id": [1, 2, 3, 4, 5],
-            "student_name": [
-                "A",
-                "B",
-                "C",
-                "D",
-                "E",
-            ],
-            "student_email": [
-                "A@gmail.com",
-                "B@gmail.com",
-                "C@gmail.com",
-                "D@gmail.com",
-                "E@gmail.com",
-            ]
-        }
-    )
+    cursor.execute("SELECT * from student")
+    records = cursor.fetchall()
+    students_df = pd.DataFrame(records)
+    students_df.columns = ['ID', 'Name', 'Email', 'DOB']
 
     return students_df
 
 
 def students_main_func():
-    # ADDING CONNECTION HERE
-    # sample
-    # conn = st.experimental_connection("sql")
-
-    # temp
-    conn = None
+    conn = make_connection()
 
     students_df = get_students_data(conn)
 
