@@ -8,14 +8,25 @@ def table_display():
     conn = make_connection()
     cursor = conn.cursor(buffered=True)
     cursor.execute("USE student_marks")
-    table_name = st.selectbox('Select Table', ('Student','Instructor','Elective','Course','Exam'))
-    cursor.callproc('DisplayTableRecords',(table_name,))
+    
+    table_name = st.selectbox('Select Table', ('Student', 'Instructor', 'Elective', 'Course', 'Exam'))
+    
+    # Fetch column names
+    cursor.execute(f"DESCRIBE {table_name}")
+    columns = [column[0] for column in cursor.fetchall()]
+
+    # Fetch records
+    cursor.callproc('DisplayTableRecords', (table_name,))
     for result in cursor.stored_results():
         records = result.fetchall()
-        df = pd.DataFrame(records)
+
+        # Create DataFrame with column names
+        df = pd.DataFrame(records, columns=columns)
+        
+        # Display DataFrame in Streamlit
         st.dataframe(df)
 
-
+    
     # st.subheader("Student Table")
     # # convert to df
     # df = pd.read_sql("SELECT * FROM student", conn, index_col="ID")
