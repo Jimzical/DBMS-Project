@@ -6,6 +6,10 @@ from pages.create import get_student_name
 from st_pages import add_page_title
 import plost
 
+
+
+    
+
 def get_marks(conn,student_name):
     cursor = conn.cursor(buffered=True)
     cursor.execute("USE student_marks")
@@ -111,7 +115,13 @@ def for_multiple_electives(df):
         # use_container_width=True,
     )
 
+
+    
+
+
 def for_few_electives(df):
+   
+    
     subjects = []
     for i in df.columns: 
         subjects.append(i)
@@ -133,6 +143,8 @@ def for_few_electives(df):
             opacity=0.8,
             use_container_width=True,
         )
+        
+
 
         
         
@@ -174,6 +186,11 @@ def marks_main_func():
         st.title("Best Visualisation for Few Electives")
         for_few_electives(df)
         # for_multiple_electives(df)
+    
+
+
+
+
 
 if __name__ == "__main__":
     add_page_title(layout="wide")

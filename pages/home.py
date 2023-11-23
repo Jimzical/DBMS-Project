@@ -141,31 +141,52 @@ def home_main_func():
             st.write(course)
             adding_data(conn,course,"course")
 
+procedure = '''
+    CREATE PROCEDURE DisplayTable(IN table_name VARCHAR(20), OUT query_result TEXT)
+    BEGIN
+        SET @query = CONCAT('SELECT * FROM ', table_name, ';' )
+        SET query_result = @query
+    END;
+    '''
+
 def table_display():
     conn = make_connection()
     cursor = conn.cursor(buffered=True)
     cursor.execute("USE student_marks")
 
-    st.subheader("Student Table")
-    # convert to df
-    df = pd.read_sql("SELECT * FROM student", conn, index_col="ID")
-    st.dataframe(df)
+    st.subheader("Display Table")
+    table_name = st.selectbox("Select table", ('course', 'elective', 'exam', 'instructor', 'student'))
 
-    st.subheader("Instructor Table")
-    df = pd.read_sql("SELECT * FROM instructor", conn, index_col="ID")
-    st.dataframe(df)
+    
+    result = cursor.fetchall()
+    for row in result:
+        print(row)
+    
+    cursor.close()
+    conn.close()
 
-    st.subheader("Course Table")
-    df = pd.read_sql("SELECT * FROM course", conn, index_col="ID")
-    st.dataframe(df)
 
-    st.subheader("Elective Table")
-    df = pd.read_sql("SELECT * FROM elective", conn, index_col="Student_ID")
-    st.dataframe(df)
 
-    st.subheader("Exam Table")
-    df = pd.read_sql("SELECT * FROM exam", conn, index_col="ID")
-    st.dataframe(df)
+    # st.subheader("Student Table")
+    # # convert to df
+    # df = pd.read_sql("SELECT * FROM student", conn, index_col="ID")
+    # st.dataframe(df)
+
+    # st.subheader("Instructor Table")
+    # df = pd.read_sql("SELECT * FROM instructor", conn, index_col="ID")
+    # st.dataframe(df)
+
+    # st.subheader("Course Table")
+    # df = pd.read_sql("SELECT * FROM course", conn, index_col="ID")
+    # st.dataframe(df)
+
+    # st.subheader("Elective Table")
+    # df = pd.read_sql("SELECT * FROM elective", conn, index_col="Student_ID")
+    # st.dataframe(df)
+
+    # st.subheader("Exam Table")
+    # df = pd.read_sql("SELECT * FROM exam", conn, index_col="ID")
+    # st.dataframe(df)
 
     # st.subheader("Marks Table")
     # df = pd.read_sql("SELECT * FROM marks_scored", conn, index_col=None)
